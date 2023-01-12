@@ -4,7 +4,10 @@ const apiRoutes = require('./api/api.routes');
 const auth = require('../middlewares/auth');
 const infoRoutes = require('./info/info');
 const path = require('path');
-
+const {
+    consoleLogger,
+    errorLogger,
+} = require("../logger/logger")
 const router = express.Router();
 
 
@@ -19,6 +22,7 @@ router.use("/products", productsRoutes)
 router.use("/api", apiRoutes);
 
 router.get('/', async (req, res) => {
+    consoleLogger.info("peticion a /, metodo get")
     const user = req.user;
     if (user) {
         return res.redirect("/profile")
@@ -29,23 +33,26 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/profile', auth, async (req, res) => {
+    consoleLogger.info("peticion a /profile, metodo get")
     const user = req.user;
     if (!user) { res.redirect('/'); }
     res.render('home.ejs', { sessionUser: user.username });
 });
 
 router.get('/register', async (req, res) => {
+    consoleLogger.info("peticion a /register, metodo get")
     res.sendFile(path.resolve(__dirname, '../public/register.html'));
 });
 
 router.get('/logout', async (req, res) => {
-    console.log("User logued out");
+    consoleLogger.info("peticion a /logout, metodo get")
+    consoleLogger.info("User logued out");
 
     const user = await req.user;
     try {
         req.session.destroy(err => {
             if (err) {
-                console.log(err);
+                errorLogger.error(err);
                 res.clearCookie('my-session');
             }
             else {
@@ -55,7 +62,7 @@ router.get('/logout', async (req, res) => {
         })
     }
     catch (err) {
-        console.log(err);
+        errorLogger.error(err);
     }
     
 });

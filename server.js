@@ -7,6 +7,12 @@ const passport = require('./middlewares/passport.js');
 const dbConfig = require('./db/config');
 const cluster = require("cluster");
 const os = require("os");
+const {
+    logger,
+    consoleLogger,
+} = require("./logger/logger")
+
+
 
 
 const minimist = require("minimist")
@@ -19,7 +25,7 @@ const args = minimist(process.argv.slice(2), {
     }    
 });
 const PORT = args.port;
-const clusterMode = process.argv[3] === "CLUSTER";
+const clusterMode = process.argv[4] == "CLUSTER";
 
 const app = express();
 
@@ -52,21 +58,33 @@ app.set('view engine', 'ejs');
 
 // Routes
 app.get('/datos', async (req, res) => {
+    consoleLogger.info("peticion a /datos, metodo get")
     const html = `Puerto: ${PORT}`
     res.send(html)
 });
 
 app.use("/", apiRoutes);
 
+
+
+
+if (!clusterMode){
+    consoleLogger.info("Modo Fork");
+}
+
 if (clusterMode && cluster.isPrimary) {
-    console.log("Modo Cluster");
+    consoleLogger.info("Modo Cluster");
     const NUM_WORKERS = os.cpus().length;
     for (let i = 0; i < NUM_WORKERS; i++){
         cluster.fork();
     }
+    cluster.on("exit", worker => {
+        consoleLogger("Worker", worker.process.pid, "died", new Date().toLocaleDateString())
+    })
+    cluster.fork()
 } else {
     app.listen(PORT, () => {
-        console.log(`Servidor escuchando en http://${envConfig.HOST}:${PORT}`);
+        logger.trace(`Servidor escuchando en http://${envConfig.HOST}:${PORT}`)
     });
 }
 

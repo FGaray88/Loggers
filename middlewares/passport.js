@@ -2,6 +2,10 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
+const {
+  consoleLogger,
+  errorLogger,
+} = require("../logger/logger")
 
 const UsersDao = require('../model/daos/Users.dao');
 const { formatUserForDB } = require('../utils/users.utils');
@@ -25,12 +29,12 @@ passport.use('signup', new LocalStrategy(
     };
     const newUser = formatUserForDB(userItem);
     const user = await User.createUser(newUser);
-    console.log("User registration successfull");
+    consoleLogger.info("User registration successfull");
     return done(null, user);
   }
   catch(error) {
-    console.log("Error signuping user up...");
-    console.log(error);
+    errorLogger.error("Error signuping user up...");
+    errorLogger.error(err);
     return done(error);
   }
 }));
@@ -40,13 +44,13 @@ passport.use('signin', new LocalStrategy( async (username, password, done) => {
   try {
     const user = await User.getByEmail(username);
     if (!isValidPassword(user, password)) {
-      console.log("Invalid user or password");
+      errorLogger.error("Invalid user or password");
       return done(null, false);
     }
     return done(null, user);
   }
   catch(error) {
-    console.log("Error signing in...");
+    errorLogger.error("Error signing in...");
     return done(error);
   }
 }))

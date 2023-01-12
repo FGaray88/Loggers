@@ -5,6 +5,13 @@ peticiones
 /info/random -- computo pesado
 
 comandos de ejecucion
+STANDART
+npm start -- -p 8081 CLUSTER
+arg3 = -p
+arg4 = PORT
+arg5 = MODO FORK O CLUSTER
+
+
 PM2
 pm2 start server.js --name="Fork-Server-8080" -- -p 8080 FORK
 pm2 start server.js --name="Cluster-Server-8081" -- -p 8080 CLUSTER

@@ -5,22 +5,27 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "start-forever": "forever start server.js"
+    "start-forever": "forever start server.js",
+    "test": "node benchmark.js"
   },
   "keywords": [],
   "author": "FG",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "log4js": "^6.7.1",
     "minimist": "^1.2.7",
     "mongoose": "^6.8.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "autocannon": "^7.10.0"
+  }
 }
