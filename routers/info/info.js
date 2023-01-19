@@ -27,6 +27,7 @@ const args = minimist(process.argv.slice(2),{
 //Routes
 router.get('/', async (req, res) => {
     consoleLogger.info("peticion a /info, metodo get")
+    
     res.json({
         "Corriendo en el Puerto": args.port,
         "Argumentos de entrada": args._,

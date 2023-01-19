@@ -7,9 +7,11 @@ peticiones
 comandos de ejecucion
 STANDART
 npm start -- -p 8081 CLUSTER
-arg3 = -p
-arg4 = PORT
-arg5 = MODO FORK O CLUSTER
+(
+    arg3 = -p
+    arg4 = PORT
+    arg5 = MODO FORK O CLUSTER
+)
 
 
 PM2
